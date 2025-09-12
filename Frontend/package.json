@@ -43,5 +43,10 @@
     "jsdom": "^26.1.0",
     "vite": "^7.0.5",
     "vitest": "^3.2.4"
-  }
+  },
+  "description": "**Mariposas Polinizadoras de Oceanía** es una plataforma interactiva desarrollada por un equipo de 5 coder, como parte de un proyecto llamado \"polinzadoras\" del grupo FemCoders de Factoria F5.",
+  "main": "eslint.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
