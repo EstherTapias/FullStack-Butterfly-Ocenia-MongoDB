@@ -18,18 +18,23 @@ import {
 const butterflyRoutes = express.Router()
 
 // GET - Obtener todas las mariposas
-butterflyRoutes.get('/', getAllButterflies, validateAllButterflies)
+// ✅ CORRECTO - validación primero, controlador después
+butterflyRoutes.get('/', validateAllButterflies, getAllButterflies)
 
 // GET - Obtener una mariposa por ID
-butterflyRoutes.get('/:id', getOneButterfly, validateOneButterfly)
+// ✅ CORRECTO - validación primero, controlador después
+butterflyRoutes.get('/:id', validateOneButterfly, getOneButterfly)
 
 // POST - Crear una nueva mariposa
-butterflyRoutes.post('/', createButterfly, validateCreateButterfly)
+// ✅ CORRECTO - validación primero, controlador después
+butterflyRoutes.post('/', validateCreateButterfly, createButterfly)
 
 // PUT - Actualizar una mariposa por ID
+// ✅ CORRECTO - validación primero, controlador después
 butterflyRoutes.put('/:id', validarUpdateButterfly, updateButterfly)
 
 // DELETE - Eliminar una mariposa por ID
-butterflyRoutes.delete('/:id', deleteButterfly, validateDeleteButterfly)
+// ✅ CORRECTO - validación primero, controlador después
+butterflyRoutes.delete('/:id', validateDeleteButterfly, deleteButterfly)
 
 export default butterflyRoutes
