@@ -7,7 +7,6 @@ import Home from "../pages/Home";
 import List from "../pages/List";
 import Contact from "../pages/Contact";
 
-
 const RouterButterfly = createBrowserRouter([{
     path: "/",
     element: <Layout/>,
@@ -25,7 +24,8 @@ const RouterButterfly = createBrowserRouter([{
             element:<EditButterfly/>
         },
         {
-            path:"/viewbutterfly/:id",
+            // 🔧 Cambiado de /viewbutterfly/:id a /butterflydetail/:id para que coincida con la navegación
+            path:"/butterflydetail/:id",
             element: <ButterflyDetail/>
         },
         {
