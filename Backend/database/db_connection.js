@@ -1,22 +1,48 @@
-import { Sequelize } from "sequelize";
+// database/db_connection.js
+import mongoose from 'mongoose';
 import '@dotenvx/dotenvx/config'; 
 
-const db_connection = new Sequelize(
-  process.env.NODE_ENV === 'test' ? process.env.DB_NAME_TEST : process.env.DB_NAME,  //Utiliza DB_NAME_TEST en entorno de prueba   
-  process.env.DB_USER,     
-  process.env.DB_PASSWORD, 
-  {
-    host: process.env.DB_HOST,     
-    dialect: process.env.DB_DIALECT, 
-    port:process.env.DB_PORT,
-    define: {
-      timestamps: false 
+// Configurar la conexión de MongoDB
+const connectDB = async () => {
+    try {
+        // Usar la URI de MongoDB - soporta tanto MONGO_URI como MONGODB_URI
+        const mongoURI = process.env.NODE_ENV === 'test' 
+            ? (process.env.MONGODB_URI_TEST || process.env.MONGO_URI_TEST)
+            : (process.env.MONGODB_URI || process.env.MONGO_URI);
+
+        const conn = await mongoose.connect(mongoURI, {
+            // Opciones de conexión recomendadas
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+
+        console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+        return conn;
+    } catch (error) {
+        console.error(`❌ Error connecting to MongoDB: ${error.message}`);
+        process.exit(1);
     }
-  }
-);
+};
 
-db_connection.authenticate()
-  .then(() => console.log("✅ Connection established successfully."))
-  .catch(err => console.error("❌ Error connecting to the database:", err));
+// Función para cerrar la conexión
+const closeDB = async () => {
+    try {
+        await mongoose.connection.close();
+        console.log('✅ MongoDB connection closed');
+    } catch (error) {
+        console.error(`❌ Error closing MongoDB connection: ${error.message}`);
+    }
+};
 
-export default db_connection;
+// Función para limpiar la base de datos (útil para tests)
+const dropDB = async () => {
+    try {
+        await mongoose.connection.dropDatabase();
+        console.log('✅ Database dropped successfully');
+    } catch (error) {
+        console.error(`❌ Error dropping database: ${error.message}`);
+    }
+};
+
+export { connectDB, closeDB, dropDB };
+export default mongoose.connection;
