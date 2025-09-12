@@ -1,180 +1,178 @@
-// Importamos lo necesario
-import { DataTypes } from "sequelize";
-import db_connection from "../database/db_connection.js";
+// models/ButterflyModel.js
+import mongoose from 'mongoose';
 
-const ButterflyModel = db_connection.define('Butterfly', {
-    // id de la mariposa
-    id:{
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true // Es el id principal
-    },
-    // nombre de la mariposa
-    // Obligatorio
+const butterflySchema = new mongoose.Schema({
+    // nombre común de la mariposa - Obligatorio
     commonName: {
-        type: DataTypes.STRING, // para textos cortos
-        allowNull: false
+        type: String,
+        required: [true, 'El nombre común es obligatorio'],
+        trim: true
     },
-    //nombre cientifico
-    // Obligatorio
+    
+    // nombre científico - Obligatorio y único
     scientificName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
-    }, 
-    //Familia
-    // Obligatorio
-    family:{
-        type: DataTypes.STRING,
-        allowNull: false
+        type: String,
+        required: [true, 'El nombre científico es obligatorio'],
+        unique: true,
+        trim: true
     },
-    //region de la mariposa
-    // Region   
-    region:{
-        type: DataTypes.STRING, 
-        allowNull: false
+    
+    // Familia - Obligatorio
+    family: {
+        type: String,
+        required: [true, 'La familia es obligatoria'],
+        trim: true
     },
-    //Locacion especifica
-    specificLocation:{
-        type: DataTypes.STRING,
-        allowNull: true
+    
+    // región de la mariposa - Obligatorio
+    region: {
+        type: String,
+        required: [true, 'La región es obligatoria'],
+        trim: true
     },
-    //Habitad de la mariposa
+    
+    // Localización específica
+    specificLocation: {
+        type: String,
+        default: null,
+        trim: true
+    },
+    
+    // Hábitat de la mariposa
     habitat: {
-        type: DataTypes.STRING,
-        allowNull: true
+        type: String,
+        default: null,
+        trim: true
     },
-    // Tamaño de la ala de la mariposa (es un numero)
-    wingspan:{
-        type: DataTypes.DOUBLE,
-        allowNull: true
+    
+    // Tamaño de la ala de la mariposa
+    wingspan: {
+        type: Number,
+        default: null,
+        min: [0, 'El tamaño del ala no puede ser negativo']
     },
-    // Unidad de medida de la ala de la mariposa (cm, mm, m, etc)
-    wingspanUnit:{ 
-        type: DataTypes.STRING,
-        allowNull: true
-    }, 
-    // descripcion de la mariposa
-    description:{
-        type: DataTypes.TEXT, // Para textos largos
-        allowNull: true
+    
+    // Unidad de medida de la ala
+    wingspanUnit: {
+        type: String,
+        default: null,
+        trim: true
     },
-    // estado de conservacion de la mariposa
-    conservationStatus:{
-        type: DataTypes.STRING,
-        allowNull: true
+    
+    // descripción de la mariposa
+    description: {
+        type: String,
+        default: null,
+        trim: true
     },
-    // Nivel de preocupacion
-    // Obligatorio
-    threatLevel:{
-        type: DataTypes.STRING,
-        allowNull: false
+    
+    // estado de conservación de la mariposa
+    conservationStatus: {
+        type: String,
+        default: null,
+        trim: true
     },
+    
+    // Nivel de preocupación - Obligatorio
+    threatLevel: {
+        type: String,
+        required: [true, 'El nivel de amenaza es obligatorio'],
+        trim: true
+    },
+    
     // cantidad actual de la mariposa
-    population:{
-        type: DataTypes.STRING, 
-        allowNull: true
+    population: {
+        type: String,
+        default: null,
+        trim: true
     },
-    // Temporada de vuelo (es un array de 6 datos)
-    flightSeason:{
-        type: DataTypes.JSON,
-        defaultValue: [],
-        allowNull: true,
-        // Getter para asegurar que siempre devuelve un array
-        get() {
-            const rawValue = this.getDataValue('flightSeason');
-            if (!rawValue) return [];
-            if (typeof rawValue === 'string') {
-                try {
-                    return JSON.parse(rawValue);
-                } catch {
-                    return [rawValue];
-                }
-            }
-            return Array.isArray(rawValue) ? rawValue : [rawValue];
-        }
+    
+    // Temporada de vuelo (array de datos)
+    flightSeason: {
+        type: [String],
+        default: []
     },
-    // Es una array de dos datos
-    hostPlants:{
-        type: DataTypes.JSON,
-        defaultValue: [],
-        allowNull: true,
-        // Getter para asegurar que siempre devuelve un array
-        get() {
-            const rawValue = this.getDataValue('hostPlants');
-            if (!rawValue) return [];
-            if (typeof rawValue === 'string') {
-                try {
-                    return JSON.parse(rawValue);
-                } catch {
-                    return [rawValue];
-                }
-            }
-            return Array.isArray(rawValue) ? rawValue : [rawValue];
-        }
+    
+    // Plantas hospederas (array de datos)
+    hostPlants: {
+        type: [String],
+        default: []
     },
-    // Es un array de 3 datos
-    nectarSources:{
-        type: DataTypes.JSON,
-        defaultValue: [], 
-        allowNull: true,
-        // Getter para asegurar que siempre devuelve un array
-        get() {
-            const rawValue = this.getDataValue('nectarSources');
-            if (!rawValue) return [];
-            if (typeof rawValue === 'string') {
-                try {
-                    return JSON.parse(rawValue);
-                } catch {
-                    return [rawValue];
-                }
-            }
-            return Array.isArray(rawValue) ? rawValue : [rawValue];
-        }
+    
+    // Fuentes de néctar (array de datos)
+    nectarSources: {
+        type: [String],
+        default: []
     },
-    // Comportamiento de la mariposa (solo texto)
-    behavior:{
-        type: DataTypes.TEXT,
-        allowNull: true
+    
+    // Comportamiento de la mariposa
+    behavior: {
+        type: String,
+        default: null,
+        trim: true
     },
+    
     // Coordenadas
-    coordinates:{
-        type: DataTypes.JSON,
-        allowNull: true,
-        defaultValue: {
-            latitude: 0, 
-            longitude: 0
+    coordinates: {
+        latitude: {
+            type: Number,
+            default: null
+        },
+        longitude: {
+            type: Number,
+            default: null
         }
     },
+    
     // Color primario
-    colorPrimary:{
-        type: DataTypes.STRING, 
-        allowNull: true
+    colorPrimary: {
+        type: String,
+        default: null,
+        trim: true
     },
-    // Tag (es un array de 4 datos)
-    tags:{
-        type: DataTypes.JSON,
-        defaultValue: [],
-        allowNull: true,
-        // Getter para asegurar que siempre devuelve un array
-        get() {
-            const rawValue = this.getDataValue('tags');
-            if (!rawValue) return [];
-            if (typeof rawValue === 'string') {
-                try {
-                    return JSON.parse(rawValue);
-                } catch {
-                    return [rawValue];
-                }
-            }
-            return Array.isArray(rawValue) ? rawValue : [rawValue];
-        }
+    
+    // Tags (array de datos)
+    tags: {
+        type: [String],
+        default: []
     },
-    // Es para colocar la foto de la mariposa (se coloca como con uncodigo que le da cloudinary)
-    publicId:{
-        type: DataTypes.STRING, 
-        allowNull: true
+    
+    // ID público para Cloudinary
+    publicId: {
+        type: String,
+        default: null,
+        trim: true
     }
+}, {
+    timestamps: true // Cambié a true para tener fechas de creación/actualización
 });
+
+// Índices para mejorar performance en búsquedas
+butterflySchema.index({ scientificName: 1 });
+butterflySchema.index({ commonName: 1 });
+butterflySchema.index({ region: 1 });
+butterflySchema.index({ family: 1 });
+
+// Middleware para limpiar arrays antes de guardar
+butterflySchema.pre('save', function(next) {
+    // Limpiar elementos vacíos de los arrays
+    if (this.flightSeason) {
+        this.flightSeason = this.flightSeason.filter(item => item && item.trim());
+    }
+    if (this.hostPlants) {
+        this.hostPlants = this.hostPlants.filter(item => item && item.trim());
+    }
+    if (this.nectarSources) {
+        this.nectarSources = this.nectarSources.filter(item => item && item.trim());
+    }
+    if (this.tags) {
+        this.tags = this.tags.filter(item => item && item.trim());
+    }
+    
+    next();
+});
+
+// Crear el modelo
+const ButterflyModel = mongoose.model('Butterfly', butterflySchema);
 
 export default ButterflyModel;
