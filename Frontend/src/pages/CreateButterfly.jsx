@@ -54,7 +54,7 @@ const CreateButterfly = () => {
         }
       }
 
-      console.log("Datos procesados para enviar:", dataToSend);
+      console.log("Datos procesados para enviar:", JSON.stringify(dataToSend, null, 2));
 
       // Tu servicio createButterfly ya usa Axios
       const newButterfly = await createButterfly(dataToSend);
