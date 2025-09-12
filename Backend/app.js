@@ -1,12 +1,13 @@
+// app.js
 import express from 'express';
 import cors from 'cors';
-import db_connection from './database/db_connection.js';
+import { connectDB, closeDB } from './database/db_connection.js';
 import butterflyRoutes from './routes/butterflyRoutes.js';
 
 const app = express();
 
 // Middleware
-app.use(cors()); //permite peticiones desde cualquier dominio
+app.use(cors()); // permite peticiones desde cualquier dominio
 app.use(express.json()); // Para leer JSON en peticiones
 app.use(express.urlencoded({ extended: true })); // Para formularios
 
@@ -18,7 +19,7 @@ app.get("/", (req, res) => {
 // Rutas de la API
 app.use('/butterflies', butterflyRoutes); 
 
-// Middleware de manejo de errores (opcional pero recomendado para producción segura y depuración en desarrollo)
+// Middleware de manejo de errores
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ 
@@ -27,34 +28,26 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Ruta para manejar 404 - LÍNEA CORREGIDA antes había usado *, lo cual no es correcto en Express
+// Ruta para manejar 404
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
 // Configuración de base de datos
-(async () => {
+const initializeApp = async () => {
   try {
-      await db_connection.authenticate();
-      console.log('✅ Connection established successfully.');
-      
-      // Determinar si estamos en modo test
-      const isTest = process.env.NODE_ENV === 'test' || 
-                     db_connection.config.database.includes('test');
-      
-      // En modo test, forzar la creación de tablas
-      const syncOptions = isTest ? { force: true } : { force: false };
-      
-      // Sincronizar todos los modelos
-      await db_connection.sync(syncOptions);
-      console.log('🦋 Database synchronized successfully');
-      
+    await connectDB();
+    console.log('🦋 Database connected successfully');
   } catch (error) {
-      console.error(`❌ Database error: ${error}`);
-      // No cerramos la app automáticamente para evitar que Jest falle
-      // process.exit(1);
+    console.error(`❌ Database connection error: ${error.message}`);
+    // No cerramos la app automáticamente para evitar que Jest falle
   }
-})();
+};
+
+// Inicializar la conexión a la base de datos solo si no estamos en modo test
+if (process.env.NODE_ENV !== 'test') {
+  initializeApp();
+}
 
 // Configuración del puerto
 const PORT = process.env.PORT || 8000;
