@@ -197,7 +197,7 @@ export const validarDatosMariposa = (datos) => {
   const errorPlantas = revisarCampoTexto(
     datos.hostPlants,
     "plantas hospederas",
-    true, // Obligatorio
+    false, // Obligatorio
     2, // Mínimo 2 caracteres
     300 // Máximo 300 caracteres
   );
