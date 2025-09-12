@@ -248,7 +248,7 @@ const FormButterfly = ({ initialData = {}, onSubmit, onCancel, mode = "create" }
                                 <select id="threatLevel" autoComplete="off" {...register("threatLevel", { required: "Este campo es obligatorio" })}>
                                     <option value="">Selecciona nivel de amenaza</option>
                                     <option value="vulnerable">Vulnerable</option>
-                                    <option value="preocupación menor">Preocupación menor</option>
+                                    <option value="preocupacion menor">Preocupación menor</option>
                                     <option value="en peligro crítico">En peligro crítico</option>
                                 </select>
                                 {errors.threatLevel && <p className="error-message">{errors.threatLevel.message}</p>}
