@@ -1,23 +1,25 @@
 import { useEffect, useState } from "react";
-import ButterflyCard from "../components/ButterflyCard"; //Importamos el componente ButterflyCard y que contiene las tarjetas.
-import "./list.css"; //Importamos el CSS que le da estilo a esta página en particular
-import SearchBar from "../components/SearchBar"; //Importamos el componente de SearchBar
-import Map from "../components/Map"; //  Importamos el componente de Mapa
+import ButterflyCard from "../components/ButterflyCard";
+import "./list.css";
+import SearchBar from "../components/SearchBar";
+import Map from "../components/Map";
 import { getAllButterflies } from "../services/ButterflyServices";
 
 const List = () => {
-  const [searchTerm, setSearchTerm] = useState(""); //Con el useState vamos a guardar el texto de busqueda, lo inicializamos vacio.
-  const [selectedRegion, setSelectedRegion] = useState("Todas"); //Este es para la Region lo iniciamos en Todas para que se vean todas desde el inicio.
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedRegion, setSelectedRegion] = useState("Todas");
   const [selectedThreat, setSelectedThreat] = useState("Todas");
   const [butterflies, setButterflies] = useState([]);
-  // const [ButterflyData, setButterflyData] = useState([]);
 
-  useEffect(() => { //.
+  useEffect(() => {
     const fetchButterflyData = async () => {
       try {
         const bfData = await getAllButterflies();
         setButterflies(bfData);
-        console.log("Mariposas: ", bfData)
+        console.log("Mariposas: ", bfData);
+        
+        // 🔧 Debug: Verifica la estructura de las coordenadas
+        console.log("Primera mariposa coordenadas:", bfData[0]?.coordinates);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -30,10 +32,9 @@ const List = () => {
     setSelectedRegion("Todas");
     setSelectedThreat("Todas");
   };
-  // Lógica de filtrado.
-  //filteredButterflies va a guardar la lista de las mariposas dependiendo la filtración.
+
+  // Lógica de filtrado
   const filteredButterflies = butterflies.filter((butterfly) => {
-    //filter() Es una función de JavaScript que crea una nueva lista solo con los elementos que cumplen una condición.
     // Filtro por región
     const regionMatch =
       selectedRegion === "Todas" || butterfly.region === selectedRegion;
@@ -48,31 +49,28 @@ const List = () => {
 
     return regionMatch && searchMatch && threatMatch;
   });
+
   return (
     <>
       <div className="listPage">
-
         <SearchBar
-          onSearchChange={setSearchTerm} // Pasa la función para actualizar el término de búsqueda
-          onRegionChange={setSelectedRegion} // Pasa la función para actualizar la región
+          onSearchChange={setSearchTerm}
+          onRegionChange={setSelectedRegion}
           onThreatChange={setSelectedThreat}
           onClearAll={handleClearFilters}
         />
+        
         <div style={{ margin: "20px 0" }}>
           <Map butterflies={filteredButterflies} />
         </div>
 
         <div className="butterfly-list-container">
-          {filteredButterflies.map(
-            (
-              butterfly //Accedemos a la base de datos y la recorremos mediante el map. Cada elemento que recorre se llamará butterfly (está en el paréntesis de la función)
-            ) => (
-              <ButterflyCard //Llamamos al componente donde se encuentran las tarjetas.
-                key={butterfly.id} // Identifica al elemento, escogemos id porque es único para cada mariposa.
-                butterfly={butterfly}
-              />
-            )
-          )}
+          {filteredButterflies.map((butterfly) => (
+            <ButterflyCard
+              key={butterfly._id} // 🔧 Cambiado de butterfly.id a butterfly._id para MongoDB
+              butterfly={butterfly}
+            />
+          ))}
         </div>
       </div>
     </>
