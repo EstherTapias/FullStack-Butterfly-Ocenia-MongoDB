@@ -114,30 +114,30 @@ describe('Oceania-Butterflies-Backend-MongoDB', () => {
     describe('POST /butterflies', () => {
         let newButterflyData;
         let response;
-        
+
         beforeEach(async () => {
             newButterflyData = {
                 commonName: "Test butterfly CREATE",
                 scientificName: `Test butterfly CREATE ${Date.now()}`,
                 family: "Test butterfly CREATE",
-                region: "Test butterfly CREATE",
-                threatLevel: "Test butterfly CREATE"
+                region: "Australia", // ✅ Cambiado a valor válido
+                threatLevel: "Medium" // ✅ Cambiado a valor válido
             };
             response = await request(app).post('/butterflies').send(newButterflyData);
         });
-        
+
         test('Should return a response with status 201 and type json', () => {
             expect(response.status).toBe(201);
             expect(response.headers['content-type']).toContain('json');
         });
-        
+
         test('Should return the created butterfly with correct data', () => {
             expect(response.body).toHaveProperty('butterfly');
             expect(response.body.butterfly).toHaveProperty('_id');
             expect(response.body.butterfly.commonName).toBe(newButterflyData.commonName);
             expect(response.body.butterfly.scientificName).toBe(newButterflyData.scientificName);
         });
-        
+
         afterEach(async () => {
             if (response.body && response.body.butterfly && response.body.butterfly._id) {
                 await ButterflyModel.findByIdAndDelete(response.body.butterfly._id);

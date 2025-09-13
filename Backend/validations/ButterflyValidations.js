@@ -176,12 +176,15 @@ export const validarDatosMariposa = (datos) => {
       mensaje: "El nivel de amenaza es obligatorio",
     });
   } else {
-    // Lista de niveles válidos 
+    // Lista de niveles válidos - CORREGIDA
     const nivelesValidos = [
+      "Low",
+      "Medium",
+      "High",
+      "Critical",
       "vulnerable",
       "preocupacion menor",
-      "Peligro Critico",
-      "Critico"
+      "Peligro Critico"
     ];
 
     if (!nivelesValidos.includes(datos.threatLevel)) {
