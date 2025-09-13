@@ -1,4 +1,3 @@
-// app.js
 import express from 'express';
 import cors from 'cors';
 import { connectDB, closeDB } from './database/db_connection.js';
@@ -6,18 +5,31 @@ import butterflyRoutes from './routes/butterflyRoutes.js';
 
 const app = express();
 
+// Configuración de CORS para Vercel
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' 
+    ? [process.env.FRONTEND_URL, 'https://your-app.vercel.app'] // Cambia por tu dominio real
+    : ['http://localhost:5173', 'http://localhost:3000'],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
 // Middleware
-app.use(cors()); // permite peticiones desde cualquier dominio
-app.use(express.json()); // Para leer JSON en peticiones
-app.use(express.urlencoded({ extended: true })); // Para formularios
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Ruta raíz
 app.get("/", (req, res) => {
-  res.send("🦋 Butterfly API - ¡Bienvenido!");
+  res.json({ 
+    message: "🦋 Butterfly API - ¡Bienvenido!",
+    status: "running",
+    environment: process.env.NODE_ENV || 'development'
+  });
 });
 
 // Rutas de la API
-app.use('/butterflies', butterflyRoutes); 
+app.use('/butterflies', butterflyRoutes);
 
 // Middleware de manejo de errores
 app.use((err, req, res, next) => {
@@ -40,7 +52,6 @@ const initializeApp = async () => {
     console.log('🦋 Database connected successfully');
   } catch (error) {
     console.error(`❌ Database connection error: ${error.message}`);
-    // No cerramos la app automáticamente para evitar que Jest falle
   }
 };
 
@@ -49,12 +60,18 @@ if (process.env.NODE_ENV !== 'test') {
   initializeApp();
 }
 
-// Configuración del puerto
+// Configuración del puerto y servidor
 const PORT = process.env.PORT || 8000;
+let server;
 
-export const server = app.listen(PORT, () => {
-  console.log(`🚀 Butterfly API server running on http://localhost:${PORT}/`);
-  console.log(`📖 Access butterflies at http://localhost:${PORT}/butterflies`);
-});
+// Solo crear el servidor si no estamos en producción (Vercel maneja esto)
+if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
+  server = app.listen(PORT, () => {
+    console.log(`🚀 Butterfly API server running on http://localhost:${PORT}/`);
+    console.log(`📖 Access butterflies at http://localhost:${PORT}/butterflies`);
+  });
+}
 
-export { app };
+// Exportar todo al final
+export default app;
+export { app, server };

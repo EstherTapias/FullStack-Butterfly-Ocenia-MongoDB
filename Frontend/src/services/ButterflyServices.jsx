@@ -1,7 +1,21 @@
 import axios from 'axios';
 
-const URL_API= "http://localhost:8000/butterflies";
+// Configuración dinámica de URL según el entorno
+const getBaseURL = () => {
+  if (typeof window !== 'undefined') {
+    // En el navegador
+    if (window.location.hostname === 'localhost') {
+      return "http://localhost:8000";
+    } else {
+      // En producción, usar la URL relativa
+      return "";
+    }
+  }
+  // En servidor (SSR), usar URL relativa
+  return "";
+};
 
+const URL_API = `${getBaseURL()}/butterflies`;
 
 //Metodo GET para el READ
 //Para ver TODAS las Mariposas
@@ -16,7 +30,6 @@ export const getAllButterflies = async() => {
     }
 }
 
-
 //Para ver de a UNA SOLA Mariposa
 export const getOneButterfly = async (id) => {
     try {
@@ -29,7 +42,6 @@ export const getOneButterfly = async (id) => {
     }
 };
 
-
 //Metodo POST para el CREATE
 export const createButterfly = async(newbutterfly)=>{
     try {
@@ -41,8 +53,6 @@ export const createButterfly = async(newbutterfly)=>{
         throw error;
     }
 };
-
-
 
 //Metodo PUT para ACTUALIZAR
 export const updateButterfly = async (id, editedButterfly) => {
@@ -67,5 +77,3 @@ export const deleteButterfly = async (id) => {
             throw error;
         }
     }
-
-
