@@ -62,7 +62,7 @@ const EditButterfly = ()=>{
         confirmButtonText:"OK"
     });
 
-      navigate(`/viewbutterfly/${id}`)// volver a la butterflydetail
+    navigate(`/butterflydetail/${id}`)// volver a la butterflydetail
     
     } catch (error) {
       console.error("Error al actualizar:", error);
