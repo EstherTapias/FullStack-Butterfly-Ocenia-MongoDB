@@ -1,6 +1,6 @@
 # 🦋 Backend MongoDB - Mariposas de Oceanía
 
-Bienvenida/o al **backend con MongoDB Atlas** del proyecto **Mariposas de Oceanía** ✨. Este repositorio contiene la API REST desarrollada para gestionar la información de las hermosas mariposas que habitan en la región de Oceanía.
+Bienvenida/o al **backend con MongoDB Atlas** del proyecto **Mariposas de Oceanía** . Este repositorio contiene la API REST desarrollada para gestionar la información de las hermosas mariposas que habitan en la región de Oceanía.
 
 ## 📖 Descripción del Proyecto
 
@@ -106,7 +106,7 @@ NODE_ENV=development
 
 # Configuración MongoDB Atlas
 MONGODB_URI=mongodb+srv://<username>:<password>@butterflies-cluster.xxxxx.mongodb.net/<dbname>?retryWrites=true&w=majority
-DB_NAME=butterflies_oceania
+DB_NAME=butterflies_app
 
 ```
 
@@ -208,7 +208,6 @@ npm run dev      # Servidor en modo desarrollo con nodemon
 npm start        # Servidor en modo producción
 npm run seed     # Inicializar BD con datos de mariposas
 npm run test     # Ejecutar tests
-npm run lint     # Verificar código con ESLint
 ```
 
 ## 🌟 Características Técnicas
