@@ -9,7 +9,10 @@
   "scripts": {
     "test": "cross-env NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll --no-cache",
     "dev": "nodemon app.js",
-    "seed": "node server/scripts/seedDatabase.js"
+    "seed": "node server/scripts/seedDatabase.js",
+    "dotenvx": "dotenvx",
+    "dotenvx:encrypt": "dotenvx encrypt",
+    "dotenvx:decrypt": "dotenvx decrypt"
   },
   "repository": {
     "type": "git",
@@ -23,13 +26,13 @@
   },
   "homepage": "https://github.com/luisasilva99/Oceania-Butterflies-Backend#readme",
   "devDependencies": {
+    "@dotenvx/dotenvx": "^1.49.0",
     "cross-env": "^10.0.0",
     "jest": "^30.1.1",
     "nodemon": "^3.1.10",
     "supertest": "^7.1.4"
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.49.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",

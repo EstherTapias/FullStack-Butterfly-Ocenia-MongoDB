@@ -115,7 +115,7 @@ DB_NAME=butterflies_oceania
 Para encriptar el .env
 
 ```
-npm run dotenvx encrypt
+npm run dotenvx:encrypt
 ```
 
 ### 5. Inicializar la base de datos con datos
