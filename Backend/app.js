@@ -15,9 +15,10 @@ const corsOptions = {
       ? [
           process.env.FRONTEND_URL,
           'https://butterfly-frontend-one.vercel.app',
-          // Agrega más dominios conforme los necesites
+          'https://butterfly-frontend-a11jrb3ah-esthers-projects-69ec9e4c.vercel.app', // ✅ AÑADIR ESTA LÍNEA
+          // Mejor aún, usar regex para cualquier deployment de tu frontend:
+          /^https:\/\/butterfly-frontend.*\.vercel\.app$/, // ✅ Permite cualquier deployment de tu frontend
           /\.vercel\.app$/, // Permite cualquier subdominio de vercel.app
-          /^https:\/\/.*\.netlify\.app$/, // Si usas Netlify también
         ]
       : [
           'http://localhost:5173',
