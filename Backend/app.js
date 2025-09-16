@@ -14,7 +14,7 @@ const corsOptions = {
     const allowedOrigins = process.env.NODE_ENV === 'production' 
       ? [
           process.env.FRONTEND_URL,
-          'https://butterfly-frontend-one.vercel.app',
+          'https://full-stack-butterfly-ocenia-mongo-d.vercel.app/butterflies',
           'https://butterfly-frontend-a11jrb3ah-esthers-projects-69ec9e4c.vercel.app', // ✅ AÑADIR ESTA LÍNEA
           // Mejor aún, usar regex para cualquier deployment de tu frontend:
           /^https:\/\/butterfly-frontend.*\.vercel\.app$/, // ✅ Permite cualquier deployment de tu frontend
