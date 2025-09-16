@@ -2,18 +2,20 @@ import axios from 'axios';
 
 // Configuración dinámica de URL según el entorno
 const getBaseURL = () => {
-  if (typeof window !== 'undefined') {
-    // En el navegador
-    if (window.location.hostname === 'localhost') {
-      return "http://localhost:8000";
-    } else {
-      // En producción, usar la URL relativa
-      return "";
+    // Usar variable de entorno si existe
+    if (import.meta.env.VITE_API_URL) {
+      return import.meta.env.VITE_API_URL;
     }
-  }
-  // En servidor (SSR), usar URL relativa
-  return "";
-};
+    
+    if (typeof window !== 'undefined') {
+      if (window.location.hostname === 'localhost') {
+        return "http://localhost:8000";
+      }
+    }
+    
+    // Fallback a la URL de producción
+    return "https://full-stack-butterfly-ocenia-mongo-d.vercel.app";
+  };
 
 const URL_API = `${getBaseURL()}/butterflies`;
 
